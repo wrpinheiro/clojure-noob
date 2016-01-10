@@ -166,3 +166,23 @@ end
 
 (print-dimensions {:x 10 :y 5 :color :blue})
 (print-original-dimensions {:x 10 :y 5 :color :blue})
+
+
+((fn [x] (* x 3)) 8)
+(#(* %1 3) 8)
+(#(* % 3) 8)
+(#(* %1 %2) 5 4)
+(map #(* % 2) [2 4 8])
+
+(def ex-anonymous-function #(* % 3))
+(ex-anonymous-function 5)
+
+(#(clojure.string/join ", " %&) ["a" "b" "c"]) ;; %& is the rest
+
+(defn divider
+  [divisor]
+  #(/ % divisor))
+
+(def divisor_by_8 (divider 8))
+
+(divisor_by_8 24)
