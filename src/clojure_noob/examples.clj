@@ -283,7 +283,7 @@ end
   (reduce (fn [final-body-parts part]
     (into final-body-parts (set [part (matching-part part)]))) [] asym-body-parts))
 
-(symmetrize-body-parts asym-hobbit-body-parts)
+(better-symmetrize-body-parts asym-hobbit-body-parts)
 
 
   (loop [remaining-asym-parts asym-body-parts
@@ -294,15 +294,52 @@ end
         (recur remaining
           (into final-body-parts (set [part (matching-part part)])))))))
 
+(defn hit
+  [asym-body-parts]
+  (let [sym-parts (better-symmetrize-body-parts asym-body-parts)
+        body-part-size-sum (reduce + (map :size sym-parts))
+        target (rand body-part-size-sum)]
+    (loop [[part & remaining] sym-parts
+      accumulated-size (:size part)]
+      (if (> accumulated-size target)
+        part
+        (recur remaining (+ accumulated-size (:size (first remaining))))))))
+
+
+(map :size [{:size 1} {:size 2}])
+
+(defn hit
+  [asym-body-parts]
+  (let [sym-parts (better-symmetrize-body-parts asym-body-parts)
+        body-part-size-sum (reduce + (map :size sym-parts))
+        target (rand body-part-size-sum)]
+    (loop [[part & remaining] sym-parts
+           accumulated-size (:size part)]
+      (if (> accumulated-size target)
+        part
+        (recur remaining (+ accumulated-size (:size (first remaining))))))))
+
+(hit asym-hobbit-body-parts)
 
 
 
 
+(= '(1 2 3 4) (conj '(2 3 4) 1))
 
+(= (#(println (str "Hello, " % "!")) "Dave") "Hello, Dave!")
 
+(first (reverse [1 2 3]))
 
+(get '(4 5 6 7) 2)
 
+(defn power
+  ([x y] (power x y (bigint 1))
+  ([x y current]
+  (if (= y 0)
+    current
+    (if (> y 0)
+      (recur x (- y 1) (* x current))
+      (recur x (+ y 1) (/ current x))))))
 
-
-
+(power 2 60)
 
