@@ -128,3 +128,109 @@ Lazy Seqs
 
 (time (def mapped-details (map vampire-related-details (range 0 1000000))))
 
+(time (first mapped-details))
+
+(time (identify-vampire (range 0 1000000)))
+
+(concat (take 8 (repeat "na")) ["Batman!"])
+
+Infinite Seqs
+
+(concat (take 2 (repeat "na")) ["Batman!"])
+
+(take 10 (repeatedly (fn [] (rand-int 10))))
+
+(cons 0 '(2 4 6))
+
+(defn positive-numbers
+  ([] (positive-numbers 1))
+  ([n] (lazy-seq (cons n (positive-numbers (inc n))))))
+
+(defn even-numbers
+  ([] (even-numbers 0))
+  ([n] (lazy-seq (cons n (even-numbers (+ n 2))))))
+
+(take 10 (positive-numbers))
+(take 10 (even-numbers))
+
+;; Collection Abstractions
+(empty? [])
+(empty? #{:a :b})
+
+(map identity {:sunlight-reaction "Glitter!"})
+(into {} (map identity {:sunlight-reaction "Glitter!"}))
+(:sunlight-reaction (into {} (map identity {:sunlight-reaction "Glitter!"})))
+
+(into [] (map identity [:garlic :sesame-oil :fried-eggs]))
+
+(identity [:garlic :sesame-oil :fried-eggs])
+
+(map identity [:garlic-clove :garlic-clove])
+
+(into #{} (map identity [:garlic-clove :garlic-clove]))
+
+(into {:favorite-emotion "gloomy"} [[:sunlight-reaction "Glitter!"]])
+
+(class [[:sunlight-reaction "Glitter!"]])
+
+(into ["cherry"] '("pine" "spruce"))
+
+(into {:favorite-animal "kitty"} {:least-favorite-smell "dog"
+                                  :relationship-with-teenager "creepy"})
+
+(conj [0] [1])
+(into [0] [1])
+(conj [0] 1)
+(conj [0] 1 2 3 4)
+
+(conj {:time "midnight"} [:place "ye olde cemetarium"])
+
+(defn my-conj
+  [target & additions]
+  (into target additions))
+
+(my-conj [] 1 2 3)
+
+Function Functions
+
+(max 0 1 2)
+(max [0 1 2])
+
+(apply max [0 1 2])
+
+(defn my-into
+  [target additions]
+  (apply conj target additions))
+
+(my-into [0] [1 2 3])
+
+(def add10 (partial + 10))
+(add10 3)
+
+(def add-missing-elements
+  (partial conj ["water" "earth" "air"]))
+
+(add-missing-elements "unobtainium" "adamantium")
+
+(defn my-partial
+  [partialized-fn & args]
+  (fn [& more-args]
+    (apply partialized-fn (into args more-args))))
+
+(def add20 (my-partial + 20))
+
+(defn lousy-logger
+  [log-level message]
+  (condp = log-level
+    :warn (clojure.string/lower-case message)
+    :emergency (clojure.string/upper-case message)))
+
+(def warn (partial lousy-logger :warn))
+
+(warn "Red light ahead")
+
+(def not-vampire? (complement vampire?))
+(defn identify-humans
+  [social-security-numbers]
+  (filter not-vampire?
+          (map vampire-related-details social-security-numbers)))
