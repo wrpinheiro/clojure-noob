@@ -234,3 +234,15 @@ Function Functions
   [social-security-numbers]
   (filter not-vampire?
           (map vampire-related-details social-security-numbers)))
+
+
+(defn tri*
+  ([] (tri* 0 1))
+  ([sum n]
+    (let [new-sum (+ sum n)]
+      (cons new-sum (lazy-seq (tri* new-sum (inc n)))))))
+
+
+
+
+
