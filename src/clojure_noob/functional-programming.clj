@@ -64,6 +64,71 @@
 
 (memo-sleepy-identity "Mr. Fantastico")
 
+(defn tri*
+  ([] (tri* 0 1))
+  ([sum n]
+    (let [new-sum (+ sum n)]
+      (cons new-sum (lazy-seq (tri* new-sum (inc n)))))))
 
+(def tri (tri*))
 
+(take 5 tri)
+
+(defn triangular?
+  [n]
+  (= n (last (take-while #(>= n %) tri))))
+
+(triangular? 6)
+
+(defn row-tri
+  [n]
+  (last (take n tri)))
+
+(row-tri 1000)
+
+(defn row-num
+  [pos]
+  (inc (count (take-while #(>= pos %) tri))))
+
+(row-num 0)
+
+(assoc-in {} [:cookie :monster :vocals] "Finntroll")
+(get-in {:cookie {:monster {:vocals "Finntroll"}}} [:cookie :monster])
+(assoc-in {} [1 :connections 4] 2)
+
+(defn connect
+  "Form a mutual connection between two positions"
+  [board max-pos pos neighbor destination]
+  (if (<= destination max-pos)
+    (reduce (fn [new-board [p1 p2]]
+              (assoc-in new-board [p1 :connections p2] neighbor))
+            board
+            [[pos destination] [destination pos]])
+    board))
+
+(connect {} 15 1 2 4)
+
+((fn [[first & rest]]
+  (println first)
+  (println rest)) [1 2 3])
+
+(defn equilibrium-index
+  ([numbers]
+    (let [first-number (first numbers) last-numbers (rest numbers)]
+      (equilibrium-index 0 first-number last-numbers 0 (reduce + last-numbers))))
+  ([index first-number last-numbers left-sum right-sum]
+    (println (str "index= " index " fn= " first-number " ln=" last-numbers " ls= " left-sum " rs= " right-sum))
+    (if (= left-sum right-sum)
+      index
+      (if (not-empty last-numbers)
+        (let [
+          new-first (first last-numbers)
+          new-last-numbers (rest last-numbers)]
+          (recur (inc index) new-first new-last-numbers
+            (+ left-sum first-number) (- right-sum new-first)))
+        -1))))
+
+(equilibrium-index [-1 3 -4 5 1 -6 2 1 1])
+
+(reduce + [])
 
