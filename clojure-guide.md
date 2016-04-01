@@ -607,11 +607,14 @@ Apply explodes a seq in rest params
 
 ## `complement`
 
-(defn my-complement [func]
-  (fn [& args]
-    (not (apply func args))))
+(defn identify-humans
+  [social-security-numbers]
+  (filter #(not (vampire? %))
+    (map vampire-related-details social-security-numbers)))
 
-(def my-pos? (my-complement neg?))
+(def not-vampire? (complement vampire?))
+(defn identify-humans
+  [social-security-numbers]
+  (filter not-vampire?
+    (map vampire-related-details social-security-numbers)))
 
-(my-pos? 1)
-(my-pos? -1)

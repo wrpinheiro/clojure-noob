@@ -234,3 +234,13 @@ Function Functions
   [social-security-numbers]
   (filter not-vampire?
           (map vampire-related-details social-security-numbers)))
+
+(defn my-complement [func]
+  (fn [& args]
+    (not (apply func args))))
+
+(def my-pos? (my-complement neg?))
+
+(my-pos? 1)
+(my-pos? -1)
+

@@ -2,8 +2,7 @@
   []
   (if (> (rand) 0.5)
     "You get a raise!"
-    "Better luck next year!"))
-
+    "Better luck next year"))
 (year-end-evaluation)
 
 (def great-baby-name "Rosanthony")
@@ -13,27 +12,46 @@
 
 (println great-baby-name)
 
+;; ## Living with Immutable Data Structures
+;; ### Recursion instead of for/while
+
 (defn sum
   ([vals] (sum vals 0))
   ([vals accumulating-total]
     (if (empty? vals)
       accumulating-total
-      (recur (rest vals) (+ (first vals) accumulating-total)))))
+      (sum (rest vals) (+ (first vals) accumulating-total)))))
+
+(defn sum
+  ([vals] (sum vals 0))
+  ([vals acummulating-total]
+    (if (empty? vals)
+      acummulating-total
+      (recur (rest vals) (+ (first vals) acummulating-total)))))
 
 (sum [0 1 2 3 ])
 
-(require '[clojure/string :as s])
+;; ### Function Composition Instead of Attribute Mutation
+
+(require '[clojure.string :as s])
 (defn clean
   [text]
   (s/replace (s/trim text) #"lol" "LOL"))
 
+(clean "My boa constrictor is so sassy lol!  ")
+
+;; ## Cool Things to Do with Pure Functions
+
+;; f1(f2(fn(x1, x2, ... xn)))
 ((comp inc *) 2 3)
+
 
 (def character
   {:name "Smooches McCutes"
    :attributes {:intelligence 10
                 :strength 4
                 :dexterity 5}})
+(def intelligence (comp :intelligence :attributes))
 (def c-int (comp :intelligence :attributes))
 (def c-str (comp :strength :attributes))
 (def c-dex (comp :dexterity :attributes))
