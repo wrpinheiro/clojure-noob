@@ -607,6 +607,15 @@ Apply explodes a seq in rest params
 
 ## `complement`
 
+(defn my-complement [func]
+  (fn [& args]
+    (not (apply func args))))
+
+(def my-pos? (my-complement neg?))
+
+(my-pos? 1)
+(my-pos? -1)
+
 (defn identify-humans
   [social-security-numbers]
   (filter #(not (vampire? %))
@@ -618,3 +627,7 @@ Apply explodes a seq in rest params
   (filter not-vampire?
     (map vampire-related-details social-security-numbers)))
 
+## Pure functions
+
+* It always returns the same result if given the same arguments (referential transparency)
+* It can’t cause any side effects

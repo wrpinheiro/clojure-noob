@@ -71,6 +71,8 @@
   (fn [& args]
     (f (apply g args))))
 
+;; ### memoize
+
 (defn sleepy-identity
   "Returns the given value after 1 second"
   [x]
@@ -81,6 +83,8 @@
 (def memo-sleepy-identity (memoize sleepy-identity))
 
 (memo-sleepy-identity "Mr. Fantastico")
+
+
 
 (defn tri*
   ([] (tri* 0 1))
